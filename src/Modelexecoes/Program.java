@@ -42,15 +42,13 @@ public class Program {
             System.out.println("Check-out date (dd/MM/yyyy): ");
             checkout = sdf.parse(sc.next());
             
-            Date now = new Date();
-            if (checkin.before(now) || checkout.before(now)){
-                System.out.println("ERROOOO, nao pode marcar para datas que ja passaram");      
-            }else if (!checkout.after(checkin)){
-                System.out.println("Error in reservation: Check-out date must be after check-in date");
-            }else{
-                res.updateDates(checkin, checkout);
-                System.out.println("Reservationnnnn "+ res);
-            }
+            
+                String error = res.updateDates(checkin, checkout);
+                if (error != null) {
+                    System.out.println("Error in reservation: "+ error);
+                }else{
+                System.out.println("Reservation: "+ res);
+                }
             
             
 
