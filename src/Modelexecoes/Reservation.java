@@ -7,6 +7,7 @@ package Modelexecoes;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import model.exceptions.DomainException;
 
 /**
  *
@@ -22,7 +23,10 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Integer roomNumber, Date checkin, Date checkout) {
+    public Reservation(Integer roomNumber, Date checkin, Date checkout) throws DomainException {
+        if(!checkout.after(checkin)){
+            throw new DomainException("Check-out date must be after check-in date");
+        }
         this.roomNumber = roomNumber;
         this.checkin = checkin;
         this.checkout = checkout;
@@ -49,17 +53,17 @@ public class Reservation {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
     
-    public String updateDates(Date checkin ,Date checkout ){
+    public void updateDates(Date checkin ,Date checkout ) throws DomainException{
          Date now = new Date();
             if (checkin.before(now) || checkout.before(now)){
-                return "ERROOOO, nao pode marcar para datas que ja passaram";
+                throw new DomainException("Reservation dates for update must be futures dates");
             } 
             if(!checkout.after(checkin)){
-                return "Check-out deve ser depois de Check-in";
+                throw new DomainException("Check-out date must be after check-in date");
             }
             this.checkin = checkin;
             this.checkout = checkout;
-            return null;
+            
             
     }
     
